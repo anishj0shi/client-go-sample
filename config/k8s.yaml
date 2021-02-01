@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ns-create-service
+  namespace: bla
+spec:
+  type: ClusterIP
+  selector:
+    app: ns-create
+  ports:
+  - port: 8000
+    targetPort: 8080
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ns-create-deployment
+  namespace: bla
+spec:
+  selector:
+    matchLabels:
+      app: ns-create
+  template:
+    metadata:
+      labels:
+        app: ns-create
+    spec:
+      containers:
+      - name: ns-create
+        image: ko://github.com/anishj0shi/client-go-sample/cmd
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: ns-create-api
+  namespace: bla
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+    - accessStrategies:
+        - config: {}
+          handler: noop
+      methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - HEAD
+      path: /.*
+  service:
+    host: create-ns
+    name: ns-create-service
+    port: 8000

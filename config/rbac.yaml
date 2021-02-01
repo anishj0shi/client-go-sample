@@ -1,0 +1,24 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  namespace: bla
+  name: ns-creater
+rules:
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["namespace"]
+    verbs: ["get", "create", "list"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: testrolebinding
+  namespace: bla
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: bla
+roleRef:
+  kind: ClusterRole
+  name: ns-creater
+  apiGroup: rbac.authorization.k8s.io
