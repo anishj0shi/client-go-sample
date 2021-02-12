@@ -1,5 +1,5 @@
 # client-go-sample
-A microservide example to create namespace using client-go.
+A microservice example to create namespace using client-go.
 
 ### Pre-requisite
 - Cluster Admins need to grant privileges to the default service account created in the
